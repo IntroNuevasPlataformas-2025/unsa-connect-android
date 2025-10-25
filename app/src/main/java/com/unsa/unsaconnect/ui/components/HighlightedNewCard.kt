@@ -40,5 +40,7 @@ fun HighlightedNewCard(new: New) {
         )
         Spacer(modifier = Modifier.height(6.dp))
         Text(text = new.title, style = MaterialTheme.typography.bodyMedium)
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(text = new.categories[0], style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSecondary) //Ahora trabaja con categoría, aunque debería ser "tipo" para eventos o noticias
     }
 }
