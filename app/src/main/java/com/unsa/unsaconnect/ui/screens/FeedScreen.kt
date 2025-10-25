@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -21,6 +22,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unsa.unsaconnect.ui.components.HighlightedNewCard
+import com.unsa.unsaconnect.ui.components.NewCard
 import com.unsa.unsaconnect.data.repositories.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,13 +74,13 @@ fun NewsFeed(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(8.dp))
 
         // Lista de noticias
-        /*
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            items(newsList) { news ->
-                NewsListItem(news)
+            items(getRecentNews()) { news ->
+                NewCard(news)
             }
-        }*/
+        }
     }
 }
