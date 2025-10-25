@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import com.unsa.unsaconnect.ui.screens.NewsFeed
+import com.unsa.unsaconnect.ui.screens.NewsTopBar
 import com.unsa.unsaconnect.ui.theme.UnsaConnectTheme
-//import com.unsa.unsaconnect.NewsFeed
+//import com.unsa.unsaconnect.ui.screens.NewsFeed
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
