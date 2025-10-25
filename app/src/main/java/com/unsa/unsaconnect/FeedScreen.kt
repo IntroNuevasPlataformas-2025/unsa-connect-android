@@ -1,5 +1,6 @@
 package com.unsa.unsaconnect
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -51,7 +52,7 @@ fun NewsTopBar() {
 @Composable
 fun NewsFeed(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier.fillMaxSize().padding(vertical = 16.dp)
+        modifier = modifier.fillMaxSize().padding(16.dp)
     ) {
         //Destacados
         Row(
@@ -101,7 +102,16 @@ fun HighlightedNewCard(new: New) {
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(8.dp)
     ) {
-        // Acceso a imagen mediante URL (Con Coil posiblemente)
+        // Acceso a imagen en res (temporal)
+        Image(
+            painter = painterResource(id = new.image),
+            contentDescription = "Imagen de la noticia",
+            modifier = Modifier
+                .height(100.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp)),
+            contentScale = ContentScale.Crop
+        )
         Spacer(modifier = Modifier.height(6.dp))
         Text(text = new.title, style = MaterialTheme.typography.bodyMedium)
     }
@@ -114,7 +124,7 @@ data class New(
     val title: String,
     val categories: List<String>, // Debería ser una lista de categorías (otra clase)
     val content: String,
-    val imageURL: String,
+    val image: Int, // Temporalmente solo se trabaja con imágenes en local
     val publishedAt: String, // Utilizar Date o LocalDateTime en las fechas (especialmente para calcular el "Time Ago")
     val createdAt: String,
     val updatedAt: String,
@@ -128,7 +138,7 @@ val highlightedNewsList = listOf(
             "Becas"
         ),
         content = "La universidad anuncia la apertura de las becas de investigación para el año académico 2025. Se invita a los estudiantes de pregrado y posgrado a postular con sus proyectos.",
-        imageURL = "https://example.com/images/beca2025.jpg",
+        image = R.drawable.image_1,
         publishedAt = "2025-10-14T09:00:00",
         createdAt = "2025-10-14T09:00:00",
         updatedAt = "2025-10-14T09:00:00"
@@ -140,7 +150,7 @@ val highlightedNewsList = listOf(
             "Congresos"
         ),
         content = "Se realizará el Congreso Internacional de Ingeniería en la ciudad de Arequipa del 15 al 17 de noviembre. Se contará con ponentes nacionales e internacionales.",
-        imageURL = "https://example.com/images/congreso_ingenieria.jpg",
+        image = R.drawable.image_2,
         publishedAt = "2025-09-25T10:00:00",
         createdAt = "2025-10-14T09:00:00",
         updatedAt = "2025-10-14T09:00:00"
@@ -152,7 +162,7 @@ val highlightedNewsList = listOf(
             "General"
         ),
         content = "Debido a trabajos de mantenimiento en el campus central, las clases del 20 de octubre se suspenden para todas las facultades.",
-        imageURL = "https://example.com/images/suspension_clases.jpg",
+        image = R.drawable.image_3,
         publishedAt = "2025-10-14T09:00:00Z",
         createdAt = "2025-10-14T09:00:00Z",
         updatedAt = "2025-10-14T09:00:00Z"
