@@ -22,8 +22,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unsa.unsaconnect.ui.components.HighlightedNewCard
-import com.unsa.unsaconnect.ui.components.NewCard
 import com.unsa.unsaconnect.data.repositories.*
+import com.unsa.unsaconnect.ui.components.NewsListItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,6 +43,7 @@ fun NewsTopBar() {
 
 @Composable
 fun NewsFeed(modifier: Modifier = Modifier) {
+    // TODO: Add logic to show LoadingIndicator and EmptyState when the ViewModel is implemented.
     Column(
         modifier = modifier.fillMaxSize().padding(16.dp)
     ) {
@@ -79,7 +80,7 @@ fun NewsFeed(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             items(getRecentNews()) { news ->
-                NewCard(news)
+                NewsListItem(news, onClick = { /* TODO: Navigate to detail screen */ })
             }
         }
     }
