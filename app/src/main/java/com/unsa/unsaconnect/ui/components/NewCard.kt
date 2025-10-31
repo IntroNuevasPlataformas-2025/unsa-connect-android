@@ -1,5 +1,6 @@
 package com.unsa.unsaconnect.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,12 +17,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.unsa.unsaconnect.R
 import com.unsa.unsaconnect.data.models.New
+import com.unsa.unsaconnect.data.repositories.NewsWithTags
 
 // No se está controlando desbordamiento de texto aún, en caso de que el título sea muy largo.
 @Composable
-fun NewCard(new: New) {
-    val timeAgo = new.publishedAt // Por implementar
+fun NewCard(newWithTag: NewsWithTags) {
+    val new = newWithTag
+    val timeAgo = new.news.publishedAt?: "" // Por implementar
+    val images: List<Int> = listOf(
+        R.drawable.image_1,
+        R.drawable.image_2,
+        R.drawable.image_3
+    )
+    Log.d("New: ", new.news.toString())
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -29,7 +39,8 @@ fun NewCard(new: New) {
     ) {
         // Acceso a imagen en res (temporal)
         Image(
-            painter = painterResource(id = new.image),
+            //painter = painterResource(id = new.image),
+            painter = painterResource(id = images[(0..2).random()]),
             contentDescription = "Imagen de la noticia",
             modifier = Modifier
                 .height(100.dp)
@@ -43,12 +54,12 @@ fun NewCard(new: New) {
         ) {
             Spacer(modifier = Modifier.height(6.dp))
             Text(
-                text = new.categories[0],
+                text = new.tags[0].name,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSecondary
             ) //Ahora trabaja con categoría, aunque debería ser "tipo" para eventos o noticias
             Spacer(modifier = Modifier.height(6.dp))
-            Text(text = new.title, style = MaterialTheme.typography.bodyMedium)
+            Text(text = new.news.title, style = MaterialTheme.typography.bodyMedium)
             Spacer(modifier = Modifier.height(6.dp))
             Text(text = timeAgo, style = MaterialTheme.typography.bodyMedium)
         }
