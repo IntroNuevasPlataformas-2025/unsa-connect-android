@@ -12,9 +12,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unsa.unsaconnect.data.repositories.NewsServerBackend
 import com.unsa.unsaconnect.data.repositories.NewsWithTags
-//import com.unsa.unsaconnect.data.repositories.model.NewsWithTags
 import com.unsa.unsaconnect.ui.components.HighlightedNewCard
-import com.unsa.unsaconnect.ui.components.NewCard
+import com.unsa.unsaconnect.ui.components.NewsListItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,6 +48,7 @@ fun NewsFeed(modifier: Modifier = Modifier) {
         recentNews = server.getNews(page = 0, filterTags = null) // primera página (0)
     }
 
+    // TODO: Add logic to show LoadingIndicator and EmptyState when the ViewModel is implemented.
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -87,8 +87,8 @@ fun NewsFeed(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            items(recentNews) { item ->
-                NewCard(item) // acepta NewsWithTags
+            items(recentNews) { nwsWithTags ->
+                NewsListItem(nwsWithTags, onClick = { /* TODO: Navigate to detail screen */ })
             }
         }
     }
