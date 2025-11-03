@@ -10,8 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.unsa.unsaconnect.data.repositories.NewsServerBackend
-import com.unsa.unsaconnect.data.repositories.NewsWithTags
+import com.unsa.unsaconnect.data.models.New
+import com.unsa.unsaconnect.data.repositories.FakeNewsRepository
+import com.unsa.unsaconnect.domain.repositories.NewsRepository
 import com.unsa.unsaconnect.ui.components.HighlightedNewCard
 import com.unsa.unsaconnect.ui.components.NewsListItem
 
@@ -35,26 +36,21 @@ fun NewsTopBar() {
 
 @Composable
 fun NewsFeed(modifier: Modifier = Modifier) {
-    //OJO: obtener instancia dentro del composable
-    val server = remember { NewsServerBackend.getInstance() }
+    val newsRepository: NewsRepository = remember { FakeNewsRepository() }
 
-    // Estado para pintar la UI
-    var featuredNews by remember { mutableStateOf<List<NewsWithTags>>(emptyList()) }
-    var recentNews by remember { mutableStateOf<List<NewsWithTags>>(emptyList()) }
+    var highlightedNews by remember { mutableStateOf<List<New>>(emptyList()) }
+    var recentNews by remember { mutableStateOf<List<New>>(emptyList()) }
 
-    // Cargar datos cuando entra a la pantalla
     LaunchedEffect(Unit) {
-        featuredNews = server.getFeaturedNews()              // List<NewsWithTags>
-        recentNews = server.getNews(page = 0, filterTags = null) // primera página (0)
+        highlightedNews = newsRepository.getHighlightedNews()
+        recentNews = newsRepository.getRecentNews()
     }
 
-    // TODO: Add logic to show LoadingIndicator and EmptyState when the ViewModel is implemented.
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // Destacados - encabezado
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -73,22 +69,20 @@ fun NewsFeed(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Carrusel de destacados
         LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            items(featuredNews) { item ->
-                HighlightedNewCard(item) // acepta NewsWithTags
+            items(highlightedNews) { item ->
+                HighlightedNewCard(item)
             }
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Lista de noticias recientes
         LazyColumn(
             modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            items(recentNews) { nwsWithTags ->
-                NewsListItem(nwsWithTags, onClick = { /* TODO: Navigate to detail screen */ })
+            items(recentNews) { news ->
+                NewsListItem(news, onClick = { /* TODO: Navigate to detail screen */ })
             }
         }
     }
