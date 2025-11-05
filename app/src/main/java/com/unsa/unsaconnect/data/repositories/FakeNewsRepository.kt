@@ -1,11 +1,13 @@
 package com.unsa.unsaconnect.data.repositories
 
+import javax.inject.Inject
+
 import com.unsa.unsaconnect.R
 import com.unsa.unsaconnect.data.models.Category
 import com.unsa.unsaconnect.data.models.New
 import com.unsa.unsaconnect.domain.repositories.NewsRepository
 
-class FakeNewsRepository : NewsRepository {
+class FakeNewsRepository @Inject constructor() : NewsRepository {
 
     private val sampleCategories = listOf(
         Category(1, "Becas"),
