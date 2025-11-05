@@ -6,15 +6,15 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.unsa.unsaconnect.data.models.New
-import com.unsa.unsaconnect.data.repositories.FakeNewsRepository
-import com.unsa.unsaconnect.domain.repositories.NewsRepository
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.unsa.unsaconnect.ui.components.HighlightedNewCard
 import com.unsa.unsaconnect.ui.components.NewsListItem
+import com.unsa.unsaconnect.ui.viewmodels.NewsFeedViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,54 +35,58 @@ fun NewsTopBar() {
 }
 
 @Composable
-fun NewsFeed(modifier: Modifier = Modifier) {
-    val newsRepository: NewsRepository = remember { FakeNewsRepository() }
+fun NewsFeed(
+    modifier: Modifier = Modifier,
+    viewModel: NewsFeedViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
 
-    var highlightedNews by remember { mutableStateOf<List<New>>(emptyList()) }
-    var recentNews by remember { mutableStateOf<List<New>>(emptyList()) }
-
-    LaunchedEffect(Unit) {
-        highlightedNews = newsRepository.getHighlightedNews()
-        recentNews = newsRepository.getRecentNews()
-    }
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+    if (uiState.isLoading) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "Destacados",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-            Text(
-                text = "Ver todos",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
+            CircularProgressIndicator()
         }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            items(highlightedNews) { item ->
-                HighlightedNewCard(item)
+    } else {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Destacados",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+                Text(
+                    text = "Ver todos",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
-        }
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            items(recentNews) { news ->
-                NewsListItem(news, onClick = { /* TODO: Navigate to detail screen */ })
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                items(uiState.highlightedNews) { item ->
+                    HighlightedNewCard(item)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(uiState.recentNews) { news ->
+                    NewsListItem(news, onClick = { /* TODO: Navigate to detail screen */ })
+                }
             }
         }
     }
