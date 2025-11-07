@@ -12,8 +12,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.unsa.unsaconnect.ui.components.HighlightedNewCard
 import com.unsa.unsaconnect.ui.components.NewsListItem
+import com.unsa.unsaconnect.ui.navigation.Screen
 import com.unsa.unsaconnect.ui.viewmodels.NewsFeedViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,7 +39,8 @@ fun NewsTopBar() {
 @Composable
 fun NewsFeed(
     modifier: Modifier = Modifier,
-    viewModel: NewsFeedViewModel = hiltViewModel()
+    viewModel: NewsFeedViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -85,7 +88,9 @@ fun NewsFeed(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 items(uiState.recentNews) { news ->
-                    NewsListItem(news, onClick = { /* TODO: Navigate to detail screen */ })
+                    NewsListItem(news, onClick = {
+                        navController.navigate(Screen.DetailNew.createRoute(news.id))
+                    })
                 }
             }
         }

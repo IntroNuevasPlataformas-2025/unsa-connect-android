@@ -24,7 +24,9 @@ class FakeNewsRepository @Inject constructor() : NewsRepository {
             image = R.drawable.image_1,
             publishedAt = "2025-10-14T09:00:00",
             createdAt = "2025-10-14T09:00:00",
-            updatedAt = "2025-10-14T09:00:00"
+            updatedAt = "2025-10-14T09:00:00",
+            author = "Oficina Universitaria de Imagen Institucional",
+            source = "Campus Central"
         ),
         New(
             id = 2,
@@ -34,7 +36,9 @@ class FakeNewsRepository @Inject constructor() : NewsRepository {
             image = R.drawable.image_2,
             publishedAt = "2025-09-25T10:00:00",
             createdAt = "2025-10-14T09:00:00",
-            updatedAt = "2025-10-14T09:00:00"
+            updatedAt = "2025-10-14T09:00:00",
+            author = "Oficina Universitaria de Imagen Institucional",
+            source = "Campus Central"
         ),
         New(
             id = 3,
@@ -44,7 +48,9 @@ class FakeNewsRepository @Inject constructor() : NewsRepository {
             image = R.drawable.image_3,
             publishedAt = "2025-10-14T09:00:00Z",
             createdAt = "2025-10-14T09:00:00Z",
-            updatedAt = "2025-10-14T09:00:00Z"
+            updatedAt = "2025-10-14T09:00:00Z",
+            author = "Oficina Universitaria de Imagen Institucional",
+            source = "Campus Central"
         ),
         New(
             id = 4,
@@ -54,7 +60,9 @@ class FakeNewsRepository @Inject constructor() : NewsRepository {
             image = R.drawable.image_1,
             publishedAt = "2025-10-14T09:00:00",
             createdAt = "2025-10-14T09:00:00",
-            updatedAt = "2025-10-14T09:00:00"
+            updatedAt = "2025-10-14T09:00:00",
+            author = "Oficina Universitaria de Imagen Institucional",
+            source = "Campus Central"
         ),
         New(
             id = 5,
@@ -64,7 +72,9 @@ class FakeNewsRepository @Inject constructor() : NewsRepository {
             image = R.drawable.image_2,
             publishedAt = "2025-09-25T10:00:00",
             createdAt = "2025-10-14T09:00:00",
-            updatedAt = "2025-10-14T09:00:00"
+            updatedAt = "2025-10-14T09:00:00",
+            author = "Oficina Universitaria de Imagen Institucional",
+            source = "Campus Central"
         ),
         New(
             id = 6,
@@ -74,7 +84,9 @@ class FakeNewsRepository @Inject constructor() : NewsRepository {
             image = R.drawable.image_3,
             publishedAt = "2025-10-14T09:00:00Z",
             createdAt = "2025-10-14T09:00:00Z",
-            updatedAt = "2025-10-14T09:00:00Z"
+            updatedAt = "2025-10-14T09:00:00Z",
+            author = "Oficina Universitaria de Imagen Institucional",
+            source = "Campus Central"
         )
     )
 
