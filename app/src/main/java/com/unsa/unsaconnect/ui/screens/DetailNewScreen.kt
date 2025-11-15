@@ -10,11 +10,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -28,6 +30,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -86,7 +89,7 @@ fun DetailNewScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "Noticia • Publicado • ${'$'}{news.publishedAt}",
+                        text = "Noticia • Publicado • " + news.publishedAt,
                         color = Color(0xFF9C544A),
                         fontSize = 12.sp
                     )
@@ -99,7 +102,7 @@ fun DetailNewScreen(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Por ${'$'}{news.author} • ${'$'}{news.source}",
+                        text = "Por " + news.author + " • " + news.source,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 12.sp
                     )
@@ -113,7 +116,17 @@ fun DetailNewScreen(
                             containerColor = Color(0xFFF5E8E8)
                         )
                     ) {
-                        Text(text = "Save", color = Color.Black)
+                        Row (
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.BookmarkBorder,
+                                contentDescription = "Save Icon",
+                                tint = Color.Black
+                            )
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(text = "Save", color = Color.Black)
+                        }
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
