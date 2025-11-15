@@ -11,4 +11,6 @@ data class New(
     val publishedAt: String, // Utilizar Date o LocalDateTime en las fechas (especialmente para calcular el "Time Ago")
     val createdAt: String,
     val updatedAt: String,
+    val author: String,
+    val source: String
 )
