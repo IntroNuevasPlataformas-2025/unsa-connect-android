@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.unsa.unsaconnect.data.models.CategoryWithNews
 import com.unsa.unsaconnect.data.models.New
 import com.unsa.unsaconnect.data.models.NewsCategoryCrossRef
 import com.unsa.unsaconnect.data.models.NewsWithCategories
