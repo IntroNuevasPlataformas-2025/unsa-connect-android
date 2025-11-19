@@ -90,15 +90,27 @@ class FakeNewsRepository @Inject constructor() : NewsRepository {
         )
     )
 
-    override fun getHighlightedNews(): List<New> {
-        return sampleNews.take(3)
+    override fun getHighlightedNews(): Flow<List<New>> {
+        return flowOf(sampleNews.take(3))
     }
 
-    override fun getRecentNews(): List<New> {
-        return sampleNews
+    override fun getRecentNews(): Flow<List<New>> {
+        return flowOf(sampleNews)
     }
 
-    override fun getCategories(): List<Category> {
-        return sampleCategories
+    override fun getCategories(): Flow<List<Category>> {
+        return flowOf(sampleCategories)
+    }
+
+    override fun getNewsByCategory(categoryId: Int): Flow<List<New>> {
+        return flowOf(emptyList())
+    }
+
+    override fun getFavorites(): Flow<List<New>> {
+        return flowOf(emptyList())
+    }
+
+    override suspend fun setFavorite(newsId: Int, isFavorite: Boolean) {
+        // No-op
     }
 }
