@@ -3,6 +3,7 @@ package com.unsa.unsaconnect.data.repositories
 import com.unsa.unsaconnect.data.daos.NewsDao
 import com.unsa.unsaconnect.data.models.Category
 import com.unsa.unsaconnect.data.models.New
+import com.unsa.unsaconnect.data.models.NewsWithCategories
 import com.unsa.unsaconnect.domain.repositories.NewsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -14,15 +15,13 @@ class NewsRepositoryImpl @Inject constructor(
     private val newsDao: NewsDao
 ) : NewsRepository {
 
-    override fun getHighlightedNews(): Flow<List<New>> {
+    override fun getHighlightedNews(): Flow<List<NewsWithCategories>> {
         // For now, highlighted news are the 3 most recent
         return getRecentNews().map { it.take(3) }
     }
 
-    override fun getRecentNews(): Flow<List<New>> {
-        return newsDao.getAllNewsWithCategories().map { list ->
-            list.map { it.news }
-        }
+    override fun getRecentNews(): Flow<List<NewsWithCategories>> {
+        return newsDao.getAllNewsWithCategories()
     }
 
     override fun getCategories(): Flow<List<Category>> {

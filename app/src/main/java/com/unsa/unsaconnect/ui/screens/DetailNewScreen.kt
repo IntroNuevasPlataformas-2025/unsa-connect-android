@@ -1,7 +1,6 @@
 package com.unsa.unsaconnect.ui.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -70,7 +68,7 @@ fun DetailNewScreen(
         } else if (uiState.error != null) {
             Text(text = "Error: ${'$'}{uiState.error}")
         } else {
-            uiState.news?.let { news ->
+            uiState.news?.let { item ->
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -79,7 +77,7 @@ fun DetailNewScreen(
                         .verticalScroll(rememberScrollState())
                 ) {
                     Image(
-                        painter = painterResource(id = news.image),
+                        painter = painterResource(id = item.news.image),
                         contentDescription = "Imagen de la noticia",
                         modifier = Modifier
                             .fillMaxWidth()
@@ -89,20 +87,20 @@ fun DetailNewScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "Noticia • Publicado • " + news.publishedAt,
+                        text = item.categories[0].name + " • Publicado • " + item.news.publishedAt,
                         color = Color(0xFF9C544A),
                         fontSize = 12.sp
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = news.title,
+                        text = item.news.title,
                         color = Color(0xFF1C0F0D),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Por " + news.author + " • " + news.source,
+                        text = "Por " + item.news.author + " • " + item.news.source,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 12.sp
                     )
@@ -130,7 +128,7 @@ fun DetailNewScreen(
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = news.content,
+                        text = item.news.content,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 16.sp
                     )
