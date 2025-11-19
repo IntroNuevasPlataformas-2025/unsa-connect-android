@@ -36,6 +36,8 @@ fun HighlightedNewCard(new: New) {
         Spacer(modifier = Modifier.height(6.dp))
         Text(text = new.title, style = MaterialTheme.typography.bodyMedium)
         Spacer(modifier = Modifier.height(6.dp))
+        /*
+        * Temporarily disabled category display
         if (!new.categories.isNullOrEmpty()) {
             Text(
                 text = new.categories[0].name,
@@ -43,5 +45,6 @@ fun HighlightedNewCard(new: New) {
                 color = MaterialTheme.colorScheme.onSecondary
             )
         }
+         */
     }
 }

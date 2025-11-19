@@ -21,10 +21,7 @@ class NewsRepositoryImpl @Inject constructor(
 
     override fun getRecentNews(): Flow<List<New>> {
         return newsDao.getAllNewsWithCategories().map { list ->
-            list.map { newsWithCategories ->
-                // Map the DAO model to the domain model
-                newsWithCategories.news.copy(categories = newsWithCategories.categories)
-            }
+            list.map { it.news }
         }
     }
 
@@ -34,10 +31,7 @@ class NewsRepositoryImpl @Inject constructor(
 
     override fun getNewsByCategory(categoryId: Int): Flow<List<New>> {
         return newsDao.getCategoryWithNews(categoryId).map { categoryWithNews ->
-            categoryWithNews.news.map { news ->
-                // The `news` list in this model doesn't have categories, so we'll set an empty list
-                news.copy(categories = listOf(categoryWithNews.category))
-            }
+            categoryWithNews.news
         }
     }
 

@@ -53,6 +53,8 @@ fun NewsListItem(
             Column(
                 modifier = Modifier.weight(1f)
             ) {
+                /*
+                * Temporarily disabled category display
                 if (!news.categories.isNullOrEmpty()) {
                     Text(
                         text = news.categories[0].name,
@@ -60,6 +62,7 @@ fun NewsListItem(
                         color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
+                 */
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = news.title,

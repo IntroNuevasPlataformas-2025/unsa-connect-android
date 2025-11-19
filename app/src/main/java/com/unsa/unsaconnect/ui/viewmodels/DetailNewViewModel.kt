@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,7 +32,9 @@ class DetailNewViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = DetailNewUiState(isLoading = true)
             try {
-                val news = newsRepository.getRecentNews().find { it.id == newsId }
+                val newsList = newsRepository.getRecentNews().first()
+                val news = newsList.find { it.id == newsId }
+                    ?: throw Exception("News with ID $newsId not found")
                 _uiState.value = DetailNewUiState(isLoading = false, news = news)
             } catch (e: Exception) {
                 _uiState.value = DetailNewUiState(isLoading = false, error = e.message)
