@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
+import com.unsa.unsaconnect.data.models.NewsWithCategories
 
 @HiltViewModel
 class NewsFeedViewModel @Inject constructor(

@@ -22,10 +22,12 @@ class DetailNewViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(DetailNewUiState())
     val uiState: StateFlow<DetailNewUiState> = _uiState.asStateFlow()
 
-    private val newsId: String = savedStateHandle.get<String>("newsId")!!
+    private val newsId: Int = savedStateHandle.get<String>("newsId")?.toIntOrNull() ?: -1
 
     init {
-        getNewsById(newsId.toInt())
+        if(newsId != -1){
+            getNewsById(newsId)
+        }
     }
 
     private fun getNewsById(newsId: Int) {
@@ -33,9 +35,10 @@ class DetailNewViewModel @Inject constructor(
             _uiState.value = DetailNewUiState(isLoading = true)
             try {
                 val newsList = newsRepository.getRecentNews().first()
-                val news = newsList.find { it.id == newsId }
-                    ?: throw Exception("News with ID $newsId not found")
-                _uiState.value = DetailNewUiState(isLoading = false, news = news)
+
+                val foundNews = newsList.find { it.news.id == newsId }
+
+                _uiState.value = DetailNewUiState(isLoading = false, news = foundNews)
             } catch (e: Exception) {
                 _uiState.value = DetailNewUiState(isLoading = false, error = e.message)
             }
