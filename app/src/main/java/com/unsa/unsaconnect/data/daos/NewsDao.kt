@@ -16,6 +16,19 @@ interface NewsDao {
     @Query("SELECT * FROM news")
     fun getAllNewsWithCategories(): Flow<List<NewsWithCategories>>
 
+    @Transaction
+    @Query("SELECT * FROM categories WHERE id = :categoryId")
+    fun getCategoryWithNews(categoryId: Int): Flow<CategoryWithNews>
+
+    @Query("SELECT * FROM categories")
+    fun getAllCategories(): Flow<List<com.unsa.unsaconnect.data.models.Category>>
+
+    @Query("SELECT * FROM news WHERE isFavorite = 1")
+    fun getFavoriteNews(): Flow<List<New>>
+
+    @Query("UPDATE news SET isFavorite = :isFavorite WHERE id = :newsId")
+    suspend fun setFavorite(newsId: Int, isFavorite: Boolean)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNews(news: New)
 

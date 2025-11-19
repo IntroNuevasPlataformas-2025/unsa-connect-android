@@ -13,33 +13,45 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Provider
 import javax.inject.Singleton
 
+import com.unsa.unsaconnect.data.repositories.NewsRepositoryImpl
+import com.unsa.unsaconnect.domain.repositories.NewsRepository
+import dagger.Binds
+
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
     @Provides
     @Singleton
-    fun provideDatabaseCallback(
-        database: Provider<UnsaConnectDatabase>
-    ): DatabaseCallback {
-        return DatabaseCallback(database)
-    }
+    abstract fun bindNewsRepository(
+        newsRepositoryImpl: NewsRepositoryImpl
+    ): NewsRepository
 
-    @Provides
-    @Singleton
-    fun provideAppDatabase(
-        @ApplicationContext context: Context,
-        callback: DatabaseCallback
-    ): UnsaConnectDatabase {
-        return Room.databaseBuilder(
-            context,
-            UnsaConnectDatabase::class.java,
-            "unsaconnect_database"
-        ).addCallback(callback).build()
-    }
+    companion object {
+        @Provides
+        @Singleton
+        fun provideDatabaseCallback(
+            database: Provider<UnsaConnectDatabase>
+        ): DatabaseCallback {
+            return DatabaseCallback(database)
+        }
 
-    @Provides
-    fun provideNewsDao(database: UnsaConnectDatabase): NewsDao {
-        return database.newsDao()
+        @Provides
+        @Singleton
+        fun provideAppDatabase(
+            @ApplicationContext context: Context,
+            callback: DatabaseCallback
+        ): UnsaConnectDatabase {
+            return Room.databaseBuilder(
+                context,
+                UnsaConnectDatabase::class.java,
+                "unsaconnect_database"
+            ).fallbackToDestructiveMigration().addCallback(callback).build()
+        }
+
+        @Provides
+        fun provideNewsDao(database: UnsaConnectDatabase): NewsDao {
+            return database.newsDao()
+        }
     }
 }

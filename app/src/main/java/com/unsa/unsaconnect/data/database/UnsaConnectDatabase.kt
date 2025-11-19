@@ -15,7 +15,7 @@ import com.unsa.unsaconnect.data.models.NewsCategoryCrossRef
         Category::class,
         NewsCategoryCrossRef::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class UnsaConnectDatabase : RoomDatabase() {

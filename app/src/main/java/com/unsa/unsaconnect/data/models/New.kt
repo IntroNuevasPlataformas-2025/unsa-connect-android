@@ -20,5 +20,6 @@ data class New(
     val createdAt: String,
     val updatedAt: String,
     val author: String,
-    val source: String
+    val source: String,
+    val isFavorite: Boolean = false
 )
