@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Provider
+import com.unsa.unsaconnect.R
 
 class DatabaseCallback(
     // Use Provider to break circular dependency
@@ -39,27 +40,85 @@ class DatabaseCallback(
 
         val newsData = listOf(
             NewsData(
-                New(1, "Convocatoria a Becas de Investigación 2025", "La universidad anuncia la apertura de las becas de investigación...", "2025-10-14T09:00:00", "2025-10-14T09:00:00", "2025-10-14T09:00:00", "Oficina Universitaria de Imagen Institucional", "Campus Central"),
+                New(
+                    1,
+                    "Convocatoria a Becas de Investigación 2025",
+                    "La universidad anuncia la apertura de las becas de investigación...",
+                    "2025-10-14T09:00:00",
+                    "2025-10-14T09:00:00",
+                    "2025-10-14T09:00:00",
+                    "Oficina Universitaria de Imagen Institucional",
+                    "Campus Central",
+                    image = R.drawable.image_1
+                ),
                 listOf(1)
             ),
             NewsData(
-                New(2, "Congreso Internacional de Ingeniería 2025", "Se realizará el Congreso Internacional de Ingeniería...", "2025-09-25T10:00:00", "2025-10-14T09:00:00", "2025-10-14T09:00:00", "Oficina Universitaria de Imagen Institucional", "Campus Central"),
+                New(
+                    2,
+                    "Congreso Internacional de Ingeniería 2025",
+                    "Se realizará el Congreso Internacional de Ingeniería...",
+                    "2025-09-25T10:00:00",
+                    "2025-10-14T09:00:00",
+                    "2025-10-14T09:00:00",
+                    "Oficina Universitaria de Imagen Institucional",
+                    "Campus Central",
+                    image = R.drawable.image_2
+                ),
                 listOf(2)
             ),
             NewsData(
-                New(3, "Suspensión de Clases por Mantenimiento", "Debido a trabajos de mantenimiento en el campus central...", "2025-10-14T09:00:00Z", "2025-10-14T09:00:00Z", "2025-10-14T09:00:00Z", "Oficina Universitaria de Imagen Institucional", "Campus Central"),
+                New(
+                    3,
+                    "Suspensión de Clases por Mantenimiento",
+                    "Debido a trabajos de mantenimiento en el campus central...",
+                    "2025-10-14T09:00:00Z",
+                    "2025-10-14T09:00:00Z",
+                    "2025-10-14T09:00:00Z",
+                    "Oficina Universitaria de Imagen Institucional",
+                    "Campus Central",
+                    image = R.drawable.image_3),
                 listOf(3)
             ),
             NewsData(
-                New(4, "Convocatoria a Becas de Investigación 2025", "La universidad anuncia la apertura de las becas de investigación...", "2025-10-14T09:00:00", "2025-10-14T09:00:00", "2025-10-14T09:00:00", "Oficina Universitaria de Imagen Institucional", "Campus Central"),
+                New(
+                    4,
+                    "Convocatoria a Becas de Investigación 2025",
+                    "La universidad anuncia la apertura de las becas de investigación...",
+                    "2025-10-14T09:00:00",
+                    "2025-10-14T09:00:00",
+                    "2025-10-14T09:00:00",
+                    "Oficina Universitaria de Imagen Institucional",
+                    "Campus Central",
+                    image = R.drawable.image_1),
                 listOf(1)
             ),
             NewsData(
-                New(5, "Congreso Internacional de Ingeniería 2025", "Se realizará el Congreso Internacional de Ingeniería...", "2025-09-25T10:00:00", "2025-10-14T09:00:00", "2025-10-14T09:00:00", "Oficina Universitaria de Imagen Institucional", "Campus Central"),
+                New(
+                    5,
+                    "Congreso Internacional de Ingeniería 2025",
+                    "Se realizará el Congreso Internacional de Ingeniería...",
+                    "2025-09-25T10:00:00",
+                    "2025-10-14T09:00:00",
+                    "2025-10-14T09:00:00",
+                    "Oficina Universitaria de Imagen Institucional",
+                    "Campus Central",
+                    image = R.drawable.image_2
+                ),
                 listOf(2)
             ),
             NewsData(
-                New(6, "Suspensión de Clases por Mantenimiento", "Debido a trabajos de mantenimiento en el campus central...", "2025-10-14T09:00:00Z", "2025-10-14T09:00:00Z", "2025-10-14T09:00:00Z", "Oficina Universitaria de Imagen Institucional", "Campus Central"),
+                New(
+                    6,
+                    "Suspensión de Clases por Mantenimiento",
+                    "Debido a trabajos de mantenimiento en el campus central...",
+                    "2025-10-14T09:00:00Z",
+                    "2025-10-14T09:00:00Z",
+                    "2025-10-14T09:00:00Z",
+                    "Oficina Universitaria de Imagen Institucional",
+                    "Campus Central",
+                    image = R.drawable.image_3
+                ),
                 listOf(3)
             )
         )
