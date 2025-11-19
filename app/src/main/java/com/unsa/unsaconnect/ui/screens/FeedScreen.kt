@@ -78,7 +78,7 @@ fun NewsFeed(
 
             LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 items(uiState.highlightedNews) { item ->
-                    HighlightedNewCard(item)
+                    HighlightedNewCard(item) // Es NewsWithCategories
                 }
             }
 
@@ -88,9 +88,9 @@ fun NewsFeed(
                 modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                items(uiState.recentNews) { news ->
-                    NewsListItem(news, onClick = {
-                        navController.navigate(Screen.DetailNew.createRoute(news.id))
+                items(uiState.recentNews) { newsItem ->
+                    NewsListItem(newsItem, onClick = {
+                        navController.navigate(Screen.DetailNew.createRoute(newsItem.news.id))
                     })
                 }
             }

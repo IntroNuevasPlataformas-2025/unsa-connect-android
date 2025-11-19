@@ -1,5 +1,6 @@
 package com.unsa.unsaconnect.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,16 +16,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.unsa.unsaconnect.data.models.New
+import com.unsa.unsaconnect.data.models.NewsWithCategories
+import com.unsa.unsaconnect.ui.utils.getImageForNews
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsListItem(
-    news: New,
-    onClick: (New) -> Unit
+    item: NewsWithCategories,
+    onClick: (NewsWithCategories) -> Unit
 ) {
-    val timeAgo = news.publishedAt // Por implementar
+    val timeAgo = item.news.publishedAt // Por implementar
     Card(
-        onClick = { onClick(news) },
+        onClick = { onClick(item) },
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
@@ -41,7 +44,7 @@ fun NewsListItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = news.image),
+                painter = painterResource(id = getImageForNews(item.news.id)),
                 contentDescription = "Imagen de la noticia",
                 modifier = Modifier
                     .size(64.dp)
@@ -52,16 +55,18 @@ fun NewsListItem(
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                if (news.categories.isNotEmpty()) {
+                if (item.categories.isNotEmpty()) {
                     Text(
-                        text = news.categories[0].name,
+                        text = item.categories[0].name,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSecondary
                     )
+                }else{
+                    Log.e("NewsListItem", "No hay categorias para la noticia con id: ${item.news.id}")
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = news.title,
+                    text = item.news.title,
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold
                 )
