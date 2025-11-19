@@ -13,6 +13,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.unsa.unsaconnect.data.models.New
+import com.unsa.unsaconnect.ui.utils.getImageForNews
 
 @Composable
 fun HighlightedNewCard(new: New) {
@@ -24,7 +25,7 @@ fun HighlightedNewCard(new: New) {
             .padding(8.dp)
     ) {
         Image(
-            painter = painterResource(id = new.image),
+            painter = painterResource(id = getImageForNews(new.id)),
             contentDescription = "Imagen de la noticia",
             modifier = Modifier
                 .height(100.dp)
@@ -35,7 +36,7 @@ fun HighlightedNewCard(new: New) {
         Spacer(modifier = Modifier.height(6.dp))
         Text(text = new.title, style = MaterialTheme.typography.bodyMedium)
         Spacer(modifier = Modifier.height(6.dp))
-        if (new.categories.isNotEmpty()) {
+        if (!new.categories.isNullOrEmpty()) {
             Text(
                 text = new.categories[0].name,
                 style = MaterialTheme.typography.bodySmall,

@@ -5,9 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.unsa.unsaconnect.domain.repositories.NewsRepository
 import com.unsa.unsaconnect.ui.states.NewsFeedUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,23 +16,18 @@ class NewsFeedViewModel @Inject constructor(
     private val newsRepository: NewsRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(NewsFeedUiState())
-    val uiState: StateFlow<NewsFeedUiState> = _uiState
-
-    init {
-        loadNews()
-    }
-
-    private fun loadNews() {
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true)
-            val highlightedNews = newsRepository.getHighlightedNews()
-            val recentNews = newsRepository.getRecentNews()
-            _uiState.value = _uiState.value.copy(
-                highlightedNews = highlightedNews,
-                recentNews = recentNews,
-                isLoading = false
-            )
-        }
-    }
+    val uiState: StateFlow<NewsFeedUiState> = combine(
+        newsRepository.getHighlightedNews(),
+        newsRepository.getRecentNews()
+    ) { highlightedNews, recentNews ->
+        NewsFeedUiState(
+            highlightedNews = highlightedNews,
+            recentNews = recentNews,
+            isLoading = false
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = NewsFeedUiState(isLoading = true)
+    )
 }

@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.unsa.unsaconnect.data.models.New
+import com.unsa.unsaconnect.ui.utils.getImageForNews
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,7 +42,7 @@ fun NewsListItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = news.image),
+                painter = painterResource(id = getImageForNews(news.id)),
                 contentDescription = "Imagen de la noticia",
                 modifier = Modifier
                     .size(64.dp)
@@ -52,7 +53,7 @@ fun NewsListItem(
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                if (news.categories.isNotEmpty()) {
+                if (!news.categories.isNullOrEmpty()) {
                     Text(
                         text = news.categories[0].name,
                         style = MaterialTheme.typography.bodySmall,
