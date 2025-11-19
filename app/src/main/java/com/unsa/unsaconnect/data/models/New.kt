@@ -18,8 +18,5 @@ data class New(
     val author: String,
     val source: String,
     val isFavorite: Boolean = false,
-    @Ignore
-    val categories: List<Category> = emptyList(),
-    @Ignore
     val image: Int = 0 // Temporalmente solo se trabaja con imágenes en local
 )

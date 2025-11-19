@@ -19,9 +19,9 @@ import dagger.Binds
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+abstract class AppModule {
 
-    @Provides
+    @Binds
     @Singleton
     abstract fun bindNewsRepository(
         newsRepositoryImpl: NewsRepositoryImpl
