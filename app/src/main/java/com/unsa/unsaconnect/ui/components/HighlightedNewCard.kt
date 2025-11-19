@@ -1,5 +1,6 @@
 package com.unsa.unsaconnect.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,10 +14,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.unsa.unsaconnect.data.models.New
+import com.unsa.unsaconnect.data.models.NewsWithCategories
 import com.unsa.unsaconnect.ui.utils.getImageForNews
 
 @Composable
-fun HighlightedNewCard(new: New) {
+fun HighlightedNewCard(
+    item: NewsWithCategories) {
     Column(
         modifier = Modifier
             .width(200.dp)
@@ -25,7 +28,7 @@ fun HighlightedNewCard(new: New) {
             .padding(8.dp)
     ) {
         Image(
-            painter = painterResource(id = getImageForNews(new.id)),
+            painter = painterResource(id = getImageForNews(item.news.id)),
             contentDescription = "Imagen de la noticia",
             modifier = Modifier
                 .height(100.dp)
@@ -34,17 +37,17 @@ fun HighlightedNewCard(new: New) {
             contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.height(6.dp))
-        Text(text = new.title, style = MaterialTheme.typography.bodyMedium)
+        Text(text = item.news.title, style = MaterialTheme.typography.bodyMedium)
         Spacer(modifier = Modifier.height(6.dp))
-        /*
-        * Temporarily disabled category display
-        if (!new.categories.isNullOrEmpty()) {
+
+        if (item.categories.isNotEmpty()) {
             Text(
-                text = new.categories[0].name,
+                text = item.categories[0].name, // .categories[0]
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSecondary
             )
+        } else {
+            Log.e("HighlightedNewCard", "No hay categorias para la noticia con id: ${item.news.id}")
         }
-         */
     }
 }
