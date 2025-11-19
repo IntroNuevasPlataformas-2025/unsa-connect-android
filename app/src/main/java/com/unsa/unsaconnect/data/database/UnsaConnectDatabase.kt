@@ -20,21 +20,4 @@ import com.unsa.unsaconnect.data.models.NewsCategoryCrossRef
 )
 abstract class UnsaConnectDatabase : RoomDatabase() {
     abstract fun newsDao(): NewsDao
-
-    companion object {
-        @Volatile
-        private var INSTANCE: UnsaConnectDatabase? = null
-
-        fun getDatabase(context: Context): UnsaConnectDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    UnsaConnectDatabase::class.java,
-                    "unsaconnect_database"
-                ).build()
-                INSTANCE = instance
-                instance
-            }
-        }
-    }
 }

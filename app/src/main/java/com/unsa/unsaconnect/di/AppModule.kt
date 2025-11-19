@@ -1,20 +1,45 @@
 package com.unsa.unsaconnect.di
 
-import com.unsa.unsaconnect.data.repositories.FakeNewsRepository
-import com.unsa.unsaconnect.domain.repositories.NewsRepository
-import dagger.Binds
+import android.content.Context
+import androidx.room.Room
+import com.unsa.unsaconnect.data.daos.NewsDao
+import com.unsa.unsaconnect.data.database.DatabaseCallback
+import com.unsa.unsaconnect.data.database.UnsaConnectDatabase
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class AppModule {
+object AppModule {
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindNewsRepository(
-        fakeNewsRepository: FakeNewsRepository
-    ): NewsRepository
+    fun provideDatabaseCallback(
+        database: Provider<UnsaConnectDatabase>
+    ): DatabaseCallback {
+        return DatabaseCallback(database)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppDatabase(
+        @ApplicationContext context: Context,
+        callback: DatabaseCallback
+    ): UnsaConnectDatabase {
+        return Room.databaseBuilder(
+            context,
+            UnsaConnectDatabase::class.java,
+            "unsaconnect_database"
+        ).addCallback(callback).build()
+    }
+
+    @Provides
+    fun provideNewsDao(database: UnsaConnectDatabase): NewsDao {
+        return database.newsDao()
+    }
 }
