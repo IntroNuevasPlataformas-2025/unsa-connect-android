@@ -7,20 +7,25 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.unsa.unsaconnect.ui.screens.DetailNewScreen
+import com.unsa.unsaconnect.ui.screens.FavoritesScreen
 import com.unsa.unsaconnect.ui.screens.NewsFeed
 
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
+//    NavHost(navController = navController, startDestination = Screen.Favorites.route) {
     NavHost(navController = navController, startDestination = Screen.NewsFeed.route) {
         composable(route = Screen.NewsFeed.route) {
             NewsFeed(navController = navController)
+        }
+        composable(route = Screen.Favorites.route) {
+            FavoritesScreen()
         }
         composable(
             route = Screen.DetailNew.route,
             arguments = listOf(navArgument("newsId") { type = NavType.StringType })
         ) {
-            DetailNewScreen(navigateUp = { navController.navigateUp() })
+            DetailNewScreen(navigateUp = { navController.navigateUp() }, navigateToFavorites = {navController.navigate(Screen.Favorites.route)})
         }
     }
 }

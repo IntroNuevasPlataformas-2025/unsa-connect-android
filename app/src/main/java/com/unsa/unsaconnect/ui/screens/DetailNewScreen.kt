@@ -1,5 +1,6 @@
 package com.unsa.unsaconnect.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,14 +40,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.unsa.unsaconnect.ui.viewmodels.DetailNewViewModel
+import com.unsa.unsaconnect.ui.viewmodels.FavoritesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailNewScreen(
     viewModel: DetailNewViewModel = hiltViewModel(),
-    navigateUp: () -> Unit
+    navigateUp: () -> Unit,
+    navigateToFavorites: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val favoritesViewModel: FavoritesViewModel = hiltViewModel()
 
     Scaffold(
         topBar = {
@@ -69,6 +73,10 @@ fun DetailNewScreen(
             Text(text = "Error: ${'$'}{uiState.error}")
         } else {
             uiState.news?.let { item ->
+
+                val newsId = item.news.id
+                val isFavorite = item.news.isFavorite
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -106,7 +114,15 @@ fun DetailNewScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
-                        onClick = { /* TODO: Implement save logic */ },
+                        onClick = {
+//                            Log.d(null, isFavorite.toString())
+                            if (isFavorite) {
+                                favoritesViewModel.removeFavorite(newsId) // Quitar de favoritos
+                            } else {
+                                favoritesViewModel.addFavorite(newsId) // Agregar a favoritos
+                            }
+                            //Log.d(null, favoritesViewModel.uiState.value.favoritesNews.toString())
+                        },
                         modifier = Modifier
                             .fillMaxWidth(0.4f),
                         shape = RoundedCornerShape(8.dp),
@@ -132,6 +148,20 @@ fun DetailNewScreen(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 16.sp
                     )
+                    Button(
+                        onClick = navigateToFavorites, // Llama a la navegación
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary
+                        ),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+//                        Icon(Icons.Default.Favorite, contentDescription = null)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = "Ver mis Favoritos")
+                    }
                 }
             }
         }
