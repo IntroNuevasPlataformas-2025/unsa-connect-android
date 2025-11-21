@@ -1,7 +1,7 @@
 package com.unsa.unsaconnect.ui.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable  // Agrega este import
+import androidx.compose.foundation.clickable  
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -39,13 +39,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController  // Agrega este import
+import androidx.navigation.NavHostController  
 import com.unsa.unsaconnect.ui.viewmodels.DetailNewViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailNewScreen(
-    navController: NavHostController,  // Cambia la firma: quita navigateUp y agrega navController
+    navController: NavHostController,  
     viewModel: DetailNewViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -54,7 +54,7 @@ fun DetailNewScreen(
             TopAppBar(
                 title = { },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {  // Cambia a navController.navigateUp()
+                    IconButton(onClick = { navController.navigateUp() }) {  
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back"
@@ -84,12 +84,12 @@ fun DetailNewScreen(
                             .fillMaxWidth()
                             .height(200.dp)
                             .clip(RoundedCornerShape(16.dp))
-                            .clickable {  // Agrega esto: hace la imagen clickable
-                                navController.navigate("full_image/${item.news.image}")  // Navega pasando el ID como Int
+                            .clickable {  
+                                navController.navigate("full_image/${item.news.image}")  
                             },
                         contentScale = ContentScale.Crop
                     )
-                    // El resto del código permanece igual...
+
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = item.categories[0].name + " • Publicado • " + item.news.publishedAt,
