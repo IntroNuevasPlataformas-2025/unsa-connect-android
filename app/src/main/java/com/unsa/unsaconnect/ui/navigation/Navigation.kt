@@ -1,12 +1,14 @@
 package com.unsa.unsaconnect.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.unsa.unsaconnect.ui.screens.DetailNewScreen
+import com.unsa.unsaconnect.ui.screens.FullScreenImageScreen
 import com.unsa.unsaconnect.ui.screens.NewsFeed
 
 @Composable
@@ -20,15 +22,17 @@ fun Navigation() {
             route = Screen.DetailNew.route,
             arguments = listOf(navArgument("newsId") { type = NavType.StringType })
         ) {
-            DetailNewScreen(navigateUp = { navController.navigateUp() })
+            DetailNewScreen(navController = navController)   
         }
         composable(
-            route = "full_image/{imageResId}",
+            route = "full_image/{imageResId}",  // Si usas Screen.kt, cambia a Screen.FullImage.route
             arguments = listOf(navArgument("imageResId") { type = NavType.IntType })
-        ) { 
-            backStackEntry ->
-            val imageResId = backStackEntry.arguments?.getInt("imageResId") ?: 0  // Default 0 si falla
-            FullScreenImageScreen(imageResId = imageResId, navController = navController)
+        ) { backStackEntry ->
+            val imageResId = backStackEntry.arguments?.getInt("imageResId") ?: 0
+            FullScreenImageScreen(
+                imageResId = imageResId,
+                navController = navController
+            )
         }
     }
 }
