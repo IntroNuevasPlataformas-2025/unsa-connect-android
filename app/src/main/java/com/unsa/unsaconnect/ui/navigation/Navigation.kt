@@ -22,5 +22,13 @@ fun Navigation() {
         ) {
             DetailNewScreen(navigateUp = { navController.navigateUp() })
         }
+        composable(
+            route = "full_image/{imageResId}",
+            arguments = listOf(navArgument("imageResId") { type = NavType.IntType })
+        ) { 
+            backStackEntry ->
+            val imageResId = backStackEntry.arguments?.getInt("imageResId") ?: 0  // Default 0 si falla
+            FullScreenImageScreen(imageResId = imageResId, navController = navController)
+        }
     }
 }

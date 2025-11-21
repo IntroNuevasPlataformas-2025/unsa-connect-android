@@ -1,6 +1,7 @@
 package com.unsa.unsaconnect.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,13 +39,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.unsa.unsaconnect.ui.viewmodels.DetailNewViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailNewScreen(
-    viewModel: DetailNewViewModel = hiltViewModel(),
-    navigateUp: () -> Unit
+    navController: NavController,
+    viewModel: DetailNewViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -53,7 +55,7 @@ fun DetailNewScreen(
             TopAppBar(
                 title = { },
                 navigationIcon = {
-                    IconButton(onClick = navigateUp) {
+                    IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back"
@@ -83,7 +85,11 @@ fun DetailNewScreen(
                             .fillMaxWidth()
                             .height(200.dp)
                             .clip(RoundedCornerShape(16.dp)),
+                            .clickable {  // Agrega clickable para navegar a fullscreen
+                                navController.navigate("full_image/${item.news.image}")
+                            },
                         contentScale = ContentScale.Crop
+                        
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
