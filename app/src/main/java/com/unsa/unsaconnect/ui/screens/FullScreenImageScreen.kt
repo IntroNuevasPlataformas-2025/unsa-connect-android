@@ -17,6 +17,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
+/**
+ * @brief Pantalla para mostrar una imagen en pantalla completa.
+ * @param imageResId ID del recurso de la imagen a mostrar.
+ * @param navController Controlador de navegación para cerrar la pantalla.
+ *
+ * TODO: Permitir navegación con enlaces externos para ver imágenes en futuras versiones.
+ */
 @Composable
 fun FullScreenImageScreen(
     imageResId: Int,

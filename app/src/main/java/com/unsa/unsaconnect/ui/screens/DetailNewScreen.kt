@@ -43,6 +43,10 @@ import androidx.navigation.NavHostController
 import com.unsa.unsaconnect.ui.viewmodels.DetailNewViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
+/**
+ * @brief Pantalla de detalle de noticia.
+ * Permite navegar a la pantalla de imagen completa al hacer click en la imagen principal.
+ */
 @Composable
 fun DetailNewScreen(
     navController: NavHostController,  
@@ -141,4 +145,11 @@ fun DetailNewScreen(
             }
         }
     }
+    // Ejemplo de navegación al hacer click en la imagen principal:
+    // Image(
+    //     modifier = Modifier.clickable {
+    //         navController.navigate("full_image/{imageResId}")
+    //     }
+    // )
+    // TODO: Permitir navegación con enlaces externos en futuras versiones.
 }
