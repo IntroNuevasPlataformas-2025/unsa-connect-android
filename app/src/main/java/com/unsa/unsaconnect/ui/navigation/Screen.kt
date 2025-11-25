@@ -5,4 +5,5 @@ sealed class Screen(val route: String) {
     object DetailNew : Screen("detail_screen/{newsId}") {
         fun createRoute(newsId: Int) = "detail_screen/$newsId"
     }
+    object FullImage : Screen("full_image/{imageResId}")
 }
