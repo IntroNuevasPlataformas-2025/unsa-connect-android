@@ -1,7 +1,20 @@
 package com.unsa.unsaconnect.ui.navigation
 
-sealed class Screen(val route: String) {
-    object NewsFeed : Screen("news_feed")
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.ui.graphics.vector.ImageVector
+
+sealed class Screen(
+    val route: String,
+    val title: String? = null,
+    val icon: ImageVector? = null
+) {
+    object Feed : Screen("feed", "Feed", Icons.Default.Home)
+    object Favorites : Screen("favorites", "Favorites", Icons.Default.Favorite)
+    object Settings : Screen("settings", "Settings", Icons.Default.Settings)
+
     object DetailNew : Screen("detail_screen/{newsId}") {
         fun createRoute(newsId: Int) = "detail_screen/$newsId"
     }
