@@ -40,7 +40,7 @@ fun NewsTopBar() {
 fun NewsFeed(
     modifier: Modifier = Modifier,
     viewModel: NewsFeedViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -57,7 +57,7 @@ fun NewsFeed(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Row(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
