@@ -1,6 +1,8 @@
 package com.unsa.unsaconnect.ui.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
@@ -12,7 +14,7 @@ sealed class Screen(
     val icon: ImageVector? = null
 ) {
     object Feed : Screen("feed", "Feed", Icons.Default.Home)
-    object Favorites : Screen("favorites", "Favorites", Icons.Default.Favorite)
+    object Favorites : Screen("favorites", "Favorites", Icons.Default.Bookmarks)
     object Settings : Screen("settings", "Settings", Icons.Default.Settings)
 
     object DetailNew : Screen("detail_screen/{newsId}") {
