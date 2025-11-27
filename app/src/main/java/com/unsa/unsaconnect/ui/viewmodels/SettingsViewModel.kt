@@ -1,6 +1,7 @@
 package com.unsa.unsaconnect.ui.viewmodels
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -54,6 +55,10 @@ class SettingsViewModel @Inject constructor(
     fun updateTime(hour: Int, minute: Int) {
         viewModelScope.launch {
             settingsManager.setReminderTime(hour, minute)
+
+            val isActive = isReminderEnable.value
+            Log.d("SettingsViewModel","Hora cambiada a ${hour}:${minute}, notificaciones activas?: $isActive")
+
             // Reprogramar el recordatorio con la nueva hora
             if (isReminderEnable.value) {
                 scheduleReminder(hour, minute)
@@ -85,7 +90,7 @@ class SettingsViewModel @Inject constructor(
 
         workManager.enqueueUniquePeriodicWork(
             workName,
-            ExistingPeriodicWorkPolicy.UPDATE, // Reemplaza el trabajo existente
+            ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE, // Reemplaza el trabajo existente
             workRequest
         )
 
