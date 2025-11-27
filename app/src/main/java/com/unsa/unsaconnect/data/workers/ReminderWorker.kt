@@ -21,25 +21,24 @@ class ReminderWorker @AssistedInject constructor(
     private val settingsManager: SettingsManager,
 ) : CoroutineWorker(appContext, workerParams) {
 
-    val debugTag = "ReminderWorker"
 
     override suspend fun doWork(): Result {
-        Log.d(debugTag, "Ejecutando ReminderWorker...")
+        Log.d("ReminderWorker", "Ejecutando ReminderWorker...")
 
         // Verificar si las notificaciones están habilitadas en la configuración
         val isEnabled = settingsManager.isReminderEnabled.first()
-        Log.d(debugTag,"Notificaciones habilitadas?: $isEnabled")
+        Log.d("ReminderWorker","Notificaciones habilitadas?: $isEnabled")
 
         if (!isEnabled) {
-            Log.d(debugTag, "Cancelando notificación porque está deshabilitada en configuración.")
+            Log.d("ReminderWorker", "Cancelando notificación porque está deshabilitada en configuración.")
             return Result.success()
         }
 
         try {
             showNotification()
-            Log.d(debugTag, "Notificación mostrada correctamente.")
+            Log.d("ReminderWorker", "Notificación mostrada correctamente.")
         } catch (e: Exception) {
-            Log.e(debugTag, "Error al mostrar la notificación: ${e.message}")
+            Log.e("ReminderWorker", "Error al mostrar la notificación: ${e.message}")
             return Result.failure()
         }
 
