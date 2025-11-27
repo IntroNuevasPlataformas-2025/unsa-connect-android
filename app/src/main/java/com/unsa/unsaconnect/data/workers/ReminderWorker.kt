@@ -4,6 +4,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
@@ -17,17 +18,30 @@ import kotlinx.coroutines.flow.first
 class ReminderWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    private val settingsManager: SettingsManager
+    private val settingsManager: SettingsManager,
 ) : CoroutineWorker(appContext, workerParams) {
 
+    val debugTag = "ReminderWorker"
+
     override suspend fun doWork(): Result {
+        Log.d(debugTag, "Ejecutando ReminderWorker...")
+
         // Verificar si las notificaciones están habilitadas en la configuración
         val isEnabled = settingsManager.isReminderEnabled.first()
+        Log.d(debugTag,"Notificaciones habilitadas?: $isEnabled")
+
         if (!isEnabled) {
+            Log.d(debugTag, "Cancelando notificación porque está deshabilitada en configuración.")
             return Result.success()
         }
 
-        showNotification()
+        try {
+            showNotification()
+            Log.d(debugTag, "Notificación mostrada correctamente.")
+        } catch (e: Exception) {
+            Log.e(debugTag, "Error al mostrar la notificación: ${e.message}")
+            return Result.failure()
+        }
 
         return Result.success()
     }
