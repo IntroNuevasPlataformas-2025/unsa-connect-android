@@ -65,6 +65,7 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.work)
     kapt(libs.hilt.compiler)
     //implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
 
@@ -76,4 +77,7 @@ dependencies {
 
     // DataStore
     implementation(libs.androidx.datastore.preferences)
+
+    // Workers
+    implementation(libs.androidx.work.runtime.ktx)
 }
