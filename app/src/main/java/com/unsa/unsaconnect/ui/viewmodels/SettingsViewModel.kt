@@ -35,7 +35,7 @@ class SettingsViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = Pair(8, 0)
+            initialValue = 8 to 0
         )
 
     fun toggleReminder(isEnabled: Boolean) {

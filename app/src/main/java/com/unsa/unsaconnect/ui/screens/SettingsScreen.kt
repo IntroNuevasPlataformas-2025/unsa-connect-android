@@ -1,6 +1,9 @@
 package com.unsa.unsaconnect.ui.screens
 
 import android.app.TimePickerDialog
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,6 +40,23 @@ fun SettingsScreen(
     val isReminderEnabled by viewModel.isReminderEnable.collectAsState()
     val reminderTime by viewModel.reminderTime.collectAsState()
     val context = LocalContext.current
+
+    /**
+     * @brief Lanzador para solicitar permiso de notificaciones en Android 13+
+     */
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted: Boolean ->
+            if (isGranted) {
+                // Si usuario concede el permiso, activar el recordatorio
+                viewModel.toggleReminder(true)
+            } else {
+                // Se podria manejar un mensaje explicando que el permiso es necesario
+                viewModel.toggleReminder(false)
+            }
+        }
+    )
+
 
     // Función para mostrar el TimePickerDialog
     val showTimePicker = {
@@ -93,7 +113,19 @@ fun SettingsScreen(
             }
             Switch(
                 checked = isReminderEnabled,
-                onCheckedChange = { viewModel.toggleReminder(it) }
+                onCheckedChange = { shouldEnable ->
+                    if (shouldEnable) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            // Solicitar permiso para notificaciones en Android 13+
+                            requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                        } else {
+                            // para versiones anteriores, simplemente activar el recordatorio
+                            viewModel.toggleReminder(true)
+                        }
+                    } else {
+                        viewModel.toggleReminder(false)
+                    }
+                }
             )
         }
 

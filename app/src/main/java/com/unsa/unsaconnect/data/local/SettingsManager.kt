@@ -32,7 +32,7 @@ class SettingsManager @Inject constructor(
         .map { preferences ->
             val hour = preferences[REMINDER_HOUR_KEY] ?: 8 // Default a las 8 AM
             val minute = preferences[REMINDER_MINUTE_KEY] ?: 0
-            Pair(hour, minute)
+            hour to minute
         }
 
     suspend fun setReminderTime(hour: Int, minute: Int) {
