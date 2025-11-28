@@ -19,7 +19,7 @@ fun Navigation() {
             NewsFeed(navController = navController)
         }
         composable(route = Screen.Favorites.route) {
-            FavoritesScreen()
+            FavoritesScreen(navController = navController)
         }
         composable(
             route = Screen.DetailNew.route,
