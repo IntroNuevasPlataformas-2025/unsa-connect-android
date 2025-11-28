@@ -26,31 +26,6 @@ import com.unsa.unsaconnect.ui.viewmodels.FavoritesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoritesTopBar(onBackClick: () -> Unit) {
-    CenterAlignedTopAppBar(
-        title = {
-            Text(
-                text = "Mis Favoritos",
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 18.sp
-            )
-        },
-        navigationIcon = {
-            IconButton(onClick = onBackClick) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Volver",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-        },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary
-        )
-    )
-}
-
-@Composable
 fun FavoritesScreen(
     modifier: Modifier = Modifier,
     viewModel: FavoritesViewModel = hiltViewModel(),
@@ -59,13 +34,7 @@ fun FavoritesScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
-        topBar = {
-            FavoritesTopBar(
-                onBackClick = { navController.navigateUp() }
-            )
-        }
     ) { paddingValues ->
-
         if (uiState.isLoading) {
             Box(
                 modifier = Modifier.fillMaxSize().padding(paddingValues),
