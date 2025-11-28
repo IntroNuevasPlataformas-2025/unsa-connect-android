@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController  
 import com.unsa.unsaconnect.ui.viewmodels.DetailNewViewModel
+import com.unsa.unsaconnect.ui.viewmodels.FavoritesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 /**
@@ -53,6 +54,7 @@ fun DetailNewScreen(
     viewModel: DetailNewViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val favoritesViewModel: FavoritesViewModel = hiltViewModel()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -74,6 +76,10 @@ fun DetailNewScreen(
             Text(text = "Error: ${uiState.error}")
         } else {
             uiState.news?.let { item ->
+
+                val newsId = item.news.id
+                val isFavorite = item.news.isFavorite
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -115,7 +121,13 @@ fun DetailNewScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
-                        onClick = { /* TODO: Implement save logic */ },
+                        onClick = {
+                            if (isFavorite) {
+                                favoritesViewModel.removeFavorite(newsId) // Quitar de favoritos
+                            } else {
+                                favoritesViewModel.addFavorite(newsId) // Agregar a favoritos
+                            }
+                        },
                         modifier = Modifier
                             .fillMaxWidth(0.4f),
                         shape = RoundedCornerShape(8.dp),
