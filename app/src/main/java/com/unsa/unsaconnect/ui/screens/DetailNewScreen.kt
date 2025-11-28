@@ -1,7 +1,7 @@
 package com.unsa.unsaconnect.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable  
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -39,25 +39,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController  
 import com.unsa.unsaconnect.ui.viewmodels.DetailNewViewModel
-import com.unsa.unsaconnect.ui.viewmodels.FavoritesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
+/**
+ * @brief Pantalla de detalle de noticia.
+ * Permite navegar a la pantalla de imagen completa al hacer click en la imagen principal.
+ */
 @Composable
 fun DetailNewScreen(
-    viewModel: DetailNewViewModel = hiltViewModel(),
-    navigateUp: () -> Unit,
-    navigateToFavorites: () -> Unit
+    navController: NavHostController,  
+    viewModel: DetailNewViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val favoritesViewModel: FavoritesViewModel = hiltViewModel()
-
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { },
                 navigationIcon = {
-                    IconButton(onClick = navigateUp) {
+                    IconButton(onClick = { navController.navigateUp() }) {  
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back"
@@ -70,13 +71,9 @@ fun DetailNewScreen(
         if (uiState.isLoading) {
             CircularProgressIndicator()
         } else if (uiState.error != null) {
-            Text(text = "Error: ${'$'}{uiState.error}")
+            Text(text = "Error: ${uiState.error}")
         } else {
             uiState.news?.let { item ->
-
-                val newsId = item.news.id
-                val isFavorite = item.news.isFavorite
-
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -90,9 +87,13 @@ fun DetailNewScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
-                            .clip(RoundedCornerShape(16.dp)),
+                            .clip(RoundedCornerShape(16.dp))
+                            .clickable {  
+                                navController.navigate("full_image/${item.news.image}")  
+                            },
                         contentScale = ContentScale.Crop
                     )
+
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = item.categories[0].name + " • Publicado • " + item.news.publishedAt,
@@ -114,15 +115,7 @@ fun DetailNewScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
-                        onClick = {
-//                            Log.d(null, isFavorite.toString())
-                            if (isFavorite) {
-                                favoritesViewModel.removeFavorite(newsId) // Quitar de favoritos
-                            } else {
-                                favoritesViewModel.addFavorite(newsId) // Agregar a favoritos
-                            }
-                            //Log.d(null, favoritesViewModel.uiState.value.favoritesNews.toString())
-                        },
+                        onClick = { /* TODO: Implement save logic */ },
                         modifier = Modifier
                             .fillMaxWidth(0.4f),
                         shape = RoundedCornerShape(8.dp),
@@ -148,22 +141,15 @@ fun DetailNewScreen(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 16.sp
                     )
-                    Button(
-                        onClick = navigateToFavorites, // Llama a la navegación
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary
-                        ),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-//                        Icon(Icons.Default.Favorite, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = "Ver mis Favoritos")
-                    }
                 }
             }
         }
     }
+    // Ejemplo de navegación al hacer click en la imagen principal:
+    // Image(
+    //     modifier = Modifier.clickable {
+    //         navController.navigate("full_image/{imageResId}")
+    //     }
+    // )
+    // TODO: Permitir navegación con enlaces externos en futuras versiones.
 }
