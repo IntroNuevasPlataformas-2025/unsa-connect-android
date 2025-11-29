@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -57,6 +59,43 @@ fun NewsFeed(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
+            //Filtrado por categorías
+            if (uiState.categories.isNotEmpty()) {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    items(uiState.categories) { category ->
+                        FilterChip(
+                            selected = uiState.selectedCategoryId == category.id,
+                            onClick = {
+                                viewModel.selectCategory(category.id)
+                            },
+                            label = {
+                                Text(text = category.name)
+                            },
+                            leadingIcon = if (uiState.selectedCategoryId == category.id) {
+                                {
+                                    Icon(
+                                        imageVector = Icons.Default.Check,
+                                        contentDescription = null
+                                    )
+                                }
+                            } else null
+                        )
+                    }
+                    item {
+                        FilterChip(
+                            selected = uiState.selectedCategoryId == null,
+                            onClick = { viewModel.selectCategory(null) },
+                            label = { Text("Todos") }
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
             Spacer(modifier = Modifier.height(12.dp))
             Row(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
