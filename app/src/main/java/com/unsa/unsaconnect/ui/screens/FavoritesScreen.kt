@@ -1,6 +1,5 @@
 package com.unsa.unsaconnect.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -21,6 +19,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.unsa.unsaconnect.data.models.New
+import com.unsa.unsaconnect.ui.components.NewsListItem
+import com.unsa.unsaconnect.data.models.NewsWithCategories
 import com.unsa.unsaconnect.ui.navigation.Screen
 import com.unsa.unsaconnect.ui.viewmodels.FavoritesViewModel
 
@@ -62,94 +62,23 @@ fun FavoritesScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(uiState.favoritesNews, key = { it.id }) { newsItem ->
-                    FavoriteNewsItem(
-                        news = newsItem,
-                        onRemoveClick = {
-                            viewModel.removeFavorite(newsItem.id)
-                        },
-
+                    // Convertir New a NewsWithCategories si es necesario
+                    val newsWithCategories = viewModel.mapToNewsWithCategories(newsItem)
+                    NewsListItem(
+                        item = newsWithCategories,
                         onClick = {
-                            navController.navigate(Screen.DetailNew.createRoute(newsItem.id))
+                            // Navega pasando el id solo si es válido
+                            if (newsItem.id > 0) {
+                                navController.navigate(Screen.DetailNew.createRoute(newsItem.id))
+                            } else {
+                                // Mostrar un mensaje de error o ignorar
+                            }
+                        },
+                        onRemoveFavorite = {
+                            viewModel.removeFavorite(newsItem.id)
                         }
                     )
                 }
-            }
-        }
-    }
-}
-
-@Composable
-fun FavoriteNewsItem(
-    news: New,
-    onRemoveClick: () -> Unit,
-    onClick: () -> Unit
-) {
-    Card(
-        onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(12.dp)
-                .height(IntrinsicSize.Min),
-            verticalAlignment = Alignment.Top
-        ) {
-
-            Card(
-                shape = MaterialTheme.shapes.small,
-                modifier = Modifier.size(80.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = news.image),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = news.source ?: "General",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = news.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    fontSize = 16.sp
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = news.publishedAt?.take(10) ?: "",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
-                )
-            }
-
-            // 3. BOTÓN ELIMINAR
-            IconButton(
-                onClick = onRemoveClick,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Eliminar",
-                    tint = Color.Red
-                )
             }
         }
     }

@@ -3,7 +3,8 @@ package com.unsa.unsaconnect.ui.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-//import com.unsa.unsaconnect.data.models.New
+import com.unsa.unsaconnect.data.models.New
+import com.unsa.unsaconnect.data.models.NewsWithCategories
 import com.unsa.unsaconnect.domain.repositories.NewsRepository
 import com.unsa.unsaconnect.ui.states.FavoritesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -49,5 +50,10 @@ class FavoritesViewModel @Inject constructor(
             // Para quitar de favoritos, pasamos 'isFavorite = false'
             newsRepository.setFavorite(newsId, isFavorite = false)
         }
+    }
+
+    fun mapToNewsWithCategories(news: New): NewsWithCategories {
+        // Si no hay categorías, retorna una lista vacía
+        return NewsWithCategories(news = news, categories = emptyList())
     }
 }
