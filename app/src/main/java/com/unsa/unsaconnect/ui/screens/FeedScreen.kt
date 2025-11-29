@@ -10,33 +10,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.unsa.unsaconnect.ui.components.HighlightedNewCard
 import com.unsa.unsaconnect.ui.components.NewsListItem
 import com.unsa.unsaconnect.ui.navigation.Screen
 import com.unsa.unsaconnect.ui.viewmodels.NewsFeedViewModel
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun NewsTopBar() {
-    CenterAlignedTopAppBar(
-        title = {
-            Text(
-                text = "UNSA Connect",
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 18.sp,
-                fontFamily = FontFamily.Default
-            )
-        },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary
-        )
-    )
-}
 
 @Composable
 fun NewsFeed(
@@ -115,22 +95,55 @@ fun NewsFeed(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                items(uiState.highlightedNews) { item ->
-                    HighlightedNewCard(item) // Es NewsWithCategories
+            // Considerando que no existan noticias con la categoría elegida
+            if (uiState.highlightedNews.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "No hay noticias destacadas para esta categoría",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            } else {
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    items(uiState.highlightedNews) { item ->
+                        HighlightedNewCard(item)
+                    }
                 }
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // Considerando que no existan noticias con la categoría elegida
             LazyColumn(
                 modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                items(uiState.recentNews) { newsItem ->
-                    NewsListItem(newsItem, onClick = {
-                        navController.navigate(Screen.DetailNew.createRoute(newsItem.news.id))
-                    })
+                if (uiState.recentNews.isEmpty()) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "No hay noticias para esta categoría",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                } else {
+                    items(uiState.recentNews) { newsItem ->
+                        NewsListItem(
+                            newsItem,
+                            onClick = {
+                                navController.navigate(Screen.DetailNew.createRoute(newsItem.news.id))
+                            }
+                        )
+                    }
                 }
             }
         }
