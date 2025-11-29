@@ -1,5 +1,7 @@
 package com.unsa.unsaconnect.ui.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -62,13 +64,49 @@ fun Navigation() {
             }
             composable(
                 route = Screen.DetailNew.route,
-                arguments = listOf(navArgument("newsId") { type = NavType.StringType })
+                arguments = listOf(navArgument("newsId") { type = NavType.StringType }),
+                enterTransition = {
+                    slideIntoContainer(
+                        towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(300)
+                    )
+                },
+                exitTransition = {
+                    slideOutOfContainer(
+                        towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(300)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(300)
+                    )
+                },
+                popExitTransition = {
+                    slideOutOfContainer(
+                        towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(300)
+                    )
+                }
             ) {
                 DetailNewScreen(navController = navController)
             }
             composable(
                 route = "full_image/{imageResId}",
-                arguments = listOf(navArgument("imageResId") { type = NavType.IntType })
+                arguments = listOf(navArgument("imageResId") { type = NavType.IntType }),
+                enterTransition = {
+                    slideIntoContainer(
+                        towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                        animationSpec = tween(300)
+                    )
+                },
+                popExitTransition = {
+                    slideOutOfContainer(
+                        towards = AnimatedContentTransitionScope.SlideDirection.Down,
+                        animationSpec = tween(300)
+                    )
+                }
             ) { backStackEntry ->
                 val imageResId = backStackEntry.arguments?.getInt("imageResId") ?: 0
                 FullScreenImageScreen(

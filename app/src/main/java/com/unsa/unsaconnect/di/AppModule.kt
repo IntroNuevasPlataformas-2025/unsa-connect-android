@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.unsa.unsaconnect.data.daos.NewsDao
 import com.unsa.unsaconnect.data.database.DatabaseCallback
 import com.unsa.unsaconnect.data.database.UnsaConnectDatabase
+import com.unsa.unsaconnect.data.local.SettingsManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,6 +16,7 @@ import javax.inject.Singleton
 
 import com.unsa.unsaconnect.data.repositories.NewsRepositoryImpl
 import com.unsa.unsaconnect.domain.repositories.NewsRepository
+import com.unsa.unsaconnect.ui.screens.SettingsScreen
 import dagger.Binds
 
 @Module
@@ -52,6 +54,14 @@ abstract class AppModule {
         @Provides
         fun provideNewsDao(database: UnsaConnectDatabase): NewsDao {
             return database.newsDao()
+        }
+
+        @Provides
+        @Singleton
+        fun provideSettingsManager(
+            @ApplicationContext context: Context
+        ) : SettingsManager {
+            return SettingsManager(context)
         }
     }
 }

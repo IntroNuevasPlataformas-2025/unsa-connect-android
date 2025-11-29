@@ -39,7 +39,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController  
+import androidx.navigation.NavHostController
+import com.unsa.unsaconnect.ui.navigation.Screen
 import com.unsa.unsaconnect.ui.viewmodels.DetailNewViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -88,8 +89,8 @@ fun DetailNewScreen(
                             .fillMaxWidth()
                             .height(200.dp)
                             .clip(RoundedCornerShape(16.dp))
-                            .clickable {  
-                                navController.navigate("full_image/${item.news.image}")  
+                            .clickable {
+                                navController.navigate(Screen.FullImage.createRoute(item.news.image))
                             },
                         contentScale = ContentScale.Crop
                     )

@@ -62,10 +62,15 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation("androidx.compose.material:material-icons-extended:1.6.0")
 
+    // Workers
+    implementation(libs.androidx.work.runtime.ktx)
+
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.work)
     kapt(libs.hilt.compiler)
+    kapt(libs.androidx.hilt.compiler)
     //implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
 
     // Room
@@ -73,4 +78,8 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
+
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
+
 }
