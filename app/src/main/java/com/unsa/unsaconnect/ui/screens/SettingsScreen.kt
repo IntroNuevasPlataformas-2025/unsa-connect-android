@@ -49,10 +49,10 @@ fun SettingsScreen(
         onResult = { isGranted: Boolean ->
             if (isGranted) {
                 // Si usuario concede el permiso, activar el recordatorio
-                viewModel.toggleReminder(true)
+                viewModel.onReminderToggleChanged(true)
             } else {
                 // Se podria manejar un mensaje explicando que el permiso es necesario
-                viewModel.toggleReminder(false)
+                viewModel.onReminderToggleChanged(false)
             }
         }
     )
@@ -63,7 +63,7 @@ fun SettingsScreen(
         TimePickerDialog(
             context,
             { _, hour: Int, minute: Int ->
-                    viewModel.updateTime(hour, minute)
+                    viewModel.onTimeSelected(hour, minute)
             },
             reminderTime.first,
             reminderTime.second,
@@ -120,10 +120,10 @@ fun SettingsScreen(
                             requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
                         } else {
                             // para versiones anteriores, simplemente activar el recordatorio
-                            viewModel.toggleReminder(true)
+                            viewModel.onReminderToggleChanged(true)
                         }
                     } else {
-                        viewModel.toggleReminder(false)
+                        viewModel.onReminderToggleChanged(false)
                     }
                 }
             )

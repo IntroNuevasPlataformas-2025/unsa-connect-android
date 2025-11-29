@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.impl.WorkManagerImpl
 import com.unsa.unsaconnect.data.local.SettingsManager
 import com.unsa.unsaconnect.data.workers.ReminderWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,19 +33,20 @@ class SettingsViewModel @Inject constructor(
             initialValue = false
         )
 
-    val reminderTime = settingsManager.reminderTime
+    val reminderTime: StateFlow<Pair<Int, Int>> = settingsManager.reminderTime
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = 8 to 0
         )
 
-    fun toggleReminder(isEnabled: Boolean) {
+    // API Publica para UI
+    fun onReminderToggleChanged(isEnabled: Boolean) {
         viewModelScope.launch {
             settingsManager.setReminderEnabled(isEnabled)
-            if (isEnabled) {
+            if(isEnabled) {
                 // Programar con la hora actual
-                scheduleReminder(reminderTime.value.first, reminderTime.value.second)
+                scheduleReminder()
             } else {
                 // Cancelar recordatorio
                 cancelReminder()
@@ -52,7 +54,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun updateTime(hour: Int, minute: Int) {
+    fun onTimeSelected(hour: Int, minute: Int) {
         viewModelScope.launch {
             settingsManager.setReminderTime(hour, minute)
 
@@ -60,16 +62,41 @@ class SettingsViewModel @Inject constructor(
             Log.d("SettingsViewModel","Hora cambiada a ${hour}:${minute}, notificaciones activas?: $isActive")
 
             // Reprogramar el recordatorio con la nueva hora
-            if (isReminderEnable.value) {
-                scheduleReminder(hour, minute)
+            if(isReminderEnable.value) {
+                scheduleReminder()
             }
         }
     }
 
-    private fun scheduleReminder(hour: Int, minute: Int) {
-        val workManager = WorkManager.getInstance(context)
-        val workName = "daily_reminder_work"
+    // Logica Gestion del worker
+    // Implementacion para manejar tareas programadas de recordatorio
 
+    private fun scheduleReminder() {
+        val workManager = WorkManager.getInstance(context)
+        val (hour, minute) = reminderTime.value
+        val initialDelay = calculateInitialDelay(hour, minute)
+
+        val workRequest = PeriodicWorkRequestBuilder<ReminderWorker>(24, TimeUnit.HOURS)
+            .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+            .addTag(REMINDER_WORK_TAG)
+            .build()
+
+        workManager.enqueueUniquePeriodicWork(
+            REMINDER_WORK_NAME,
+            ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE, // Actualiza el trabajo existente
+            workRequest
+        )
+    }
+
+    private fun cancelReminder() {
+        val workManager = WorkManager.getInstance(context)
+        workManager.cancelUniqueWork(REMINDER_WORK_NAME)
+    }
+
+    /**
+     * Calcula el retraso inicial hasta la próxima hora y minuto especificados.
+     */
+    private fun calculateInitialDelay(hour: Int, minute: Int): Long {
         val now = Calendar.getInstance()
         val target = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, hour)
@@ -82,27 +109,13 @@ class SettingsViewModel @Inject constructor(
             target.add(Calendar.DAY_OF_YEAR, 1)
         }
 
-        val initialDelay = target.timeInMillis - now.timeInMillis
-
-        val workRequest = PeriodicWorkRequestBuilder<ReminderWorker>(24, TimeUnit.HOURS)
-            .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-            .build()
-
-        workManager.enqueueUniquePeriodicWork(
-            workName,
-            ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE, // Reemplaza el trabajo existente
-            workRequest
-        )
-
+        return target.timeInMillis - now.timeInMillis
     }
 
-    private fun cancelReminder() {
-        val workManager = WorkManager.getInstance(context)
-        val workName = "daily_reminder_work"
-        workManager.cancelUniqueWork(workName)
-    }
-
-    suspend fun setReminderEnabled(enabled: Boolean) {
-        settingsManager.setReminderEnabled(enabled)
+    // --- Constantes ---
+    // Nombres y tags para WorkManager
+    companion object {
+        private const val REMINDER_WORK_NAME = "daily_reminder_work"
+        private const val REMINDER_WORK_TAG = "reminder_tag"
     }
 }
