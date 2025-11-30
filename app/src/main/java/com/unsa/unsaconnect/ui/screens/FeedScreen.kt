@@ -18,6 +18,10 @@ import com.unsa.unsaconnect.ui.components.NewsListItem
 import com.unsa.unsaconnect.ui.navigation.Screen
 import com.unsa.unsaconnect.ui.viewmodels.NewsFeedViewModel
 
+/**
+ * @brief Pantalla principal de noticias.
+ * Muestra una lista de noticias destacadas y recientes, con opción de filtrar por categorías.
+ */
 @Composable
 fun NewsFeed(
     modifier: Modifier = Modifier,
