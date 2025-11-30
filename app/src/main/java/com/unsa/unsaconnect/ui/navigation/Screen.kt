@@ -20,5 +20,7 @@ sealed class Screen(
     object DetailNew : Screen("detail_screen/{newsId}") {
         fun createRoute(newsId: Int) = "detail_screen/$newsId"
     }
-    object FullImage : Screen("full_image/{imageResId}")
+    object FullImage : Screen("full_image/{imageResId}") {
+        fun createRoute(imageResId: Int) = "full_image/$imageResId"
+    }
 }
