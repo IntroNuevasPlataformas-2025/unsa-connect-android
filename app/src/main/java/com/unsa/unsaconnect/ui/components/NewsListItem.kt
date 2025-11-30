@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,7 +24,8 @@ import com.unsa.unsaconnect.ui.utils.getImageForNews
 @Composable
 fun NewsListItem(
     item: NewsWithCategories,
-    onClick: (NewsWithCategories) -> Unit
+    onClick: (NewsWithCategories) -> Unit,
+    onRemoveFavorite: (() -> Unit)? = null
 ) {
     val timeAgo = item.news.publishedAt // Por implementar
     Card(
@@ -77,12 +79,25 @@ fun NewsListItem(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            Icon(
-                imageVector = Icons.Default.ArrowForwardIos,
-                contentDescription = "Ver detalle",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(16.dp)
-            )
+            if (onRemoveFavorite != null) {
+                IconButton(
+                    onClick = onRemoveFavorite,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Eliminar favorito",
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
+            } else {
+                Icon(
+                    imageVector = Icons.Default.ArrowForwardIos,
+                    contentDescription = "Ver detalle",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
         }
     }
 }

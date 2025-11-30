@@ -1,7 +1,10 @@
 package com.unsa.unsaconnect.ui.screens
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable  
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +18,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -29,19 +34,25 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.unsa.unsaconnect.ui.navigation.Screen
 import com.unsa.unsaconnect.ui.viewmodels.DetailNewViewModel
+import com.unsa.unsaconnect.ui.viewmodels.FavoritesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 /**
@@ -54,6 +65,7 @@ fun DetailNewScreen(
     viewModel: DetailNewViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val favoritesViewModel: FavoritesViewModel = hiltViewModel()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -75,6 +87,10 @@ fun DetailNewScreen(
             Text(text = "Error: ${uiState.error}")
         } else {
             uiState.news?.let { item ->
+                val newsId = item.news.id
+                val isFavoriteDb = item.news.isFavorite
+                val favoriteState = remember(newsId, isFavoriteDb) { mutableStateOf(isFavoriteDb) }
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -115,25 +131,63 @@ fun DetailNewScreen(
                         fontSize = 12.sp
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    Button(
-                        onClick = { /* TODO: Implement save logic */ },
-                        modifier = Modifier
-                            .fillMaxWidth(0.4f),
-                        shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFFF5E8E8)
-                        )
+                    // Fila de botones alineados a la derecha
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row (
-                            verticalAlignment = Alignment.CenterVertically,
+                        Button(
+                            onClick = {
+                                // TODO: Implementar compartir noticia
+                            },
+                            shape = RoundedCornerShape(8.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFFF5E8E8)
+                            ),
+                            modifier = Modifier
+                                .padding(end = 8.dp)
                         ) {
                             Icon(
-                                imageVector = Icons.Default.BookmarkBorder,
-                                contentDescription = "Save Icon",
-                                tint = Color.Black
+                                imageVector = Icons.Default.Share,
+                                contentDescription = "Compartir",
+                                tint = Color.Black,
+                                modifier = Modifier.scale(1.0f)
                             )
-                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                            Text(text = "Save", color = Color.Black)
+                        }
+                        // Animación tipo rebote para el icono de favoritos
+                        val scaleAnim = remember { Animatable(1.0f) }
+                        LaunchedEffect(favoriteState.value) {
+                            scaleAnim.animateTo(1.2f, animationSpec = tween(120))
+                            scaleAnim.animateTo(1.0f, animationSpec = tween(120))
+                        }
+                        Button(
+                            onClick = {
+                                favoriteState.value = !favoriteState.value
+                                if (favoriteState.value) {
+                                    favoritesViewModel.addFavorite(newsId)
+                                } else {
+                                    favoritesViewModel.removeFavorite(newsId)
+                                }
+                            },
+                            shape = RoundedCornerShape(8.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFFF5E8E8)
+                            )
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = if (favoriteState.value) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                                    contentDescription = if (favoriteState.value) "Guardado" else "Guardar",
+                                    tint = if (favoriteState.value) Color(0xFF1C0F0D) else Color.Black,
+                                    modifier = Modifier.scale(scaleAnim.value)
+                                )
+                                Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                                Text(
+                                    text = if (favoriteState.value) "Guardado" else "Guardar",
+                                    color = if (favoriteState.value) Color(0xFF1C0F0D) else Color.Black
+                                )
+                            }
                         }
                     }
                     Spacer(modifier = Modifier.height(16.dp))
