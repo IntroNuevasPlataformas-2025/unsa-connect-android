@@ -10,20 +10,40 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
-import com.unsa.unsaconnect.data.models.NewsWithCategories
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @HiltViewModel
 class NewsFeedViewModel @Inject constructor(
     private val newsRepository: NewsRepository
 ) : ViewModel() {
+    private val selectedCategoryId = MutableStateFlow<Int?>(null)
 
     val uiState: StateFlow<NewsFeedUiState> = combine(
         newsRepository.getHighlightedNews(),
-        newsRepository.getRecentNews()
-    ) { highlightedNews, recentNews ->
+        newsRepository.getRecentNews(),
+        newsRepository.getCategories(),
+        selectedCategoryId
+    ) { highlightedNews, recentNews, categories, selectedCategoryId ->
+        val filteredHighlighted = if (selectedCategoryId == null) {
+            highlightedNews
+        } else {
+            highlightedNews.filter { new ->
+                new.categories.any { it.id == selectedCategoryId }
+            }
+        }
+
+        val filteredRecent = if (selectedCategoryId == null) {
+            recentNews
+        } else {
+            recentNews.filter { new ->
+                new.categories.any { it.id == selectedCategoryId }
+            }
+        }
         NewsFeedUiState(
-            highlightedNews = highlightedNews,
-            recentNews = recentNews,
+            highlightedNews = filteredHighlighted,
+            recentNews = filteredRecent,
+            categories = categories,
+            selectedCategoryId = selectedCategoryId,
             isLoading = false
         )
     }.stateIn(
@@ -31,4 +51,8 @@ class NewsFeedViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = NewsFeedUiState(isLoading = true)
     )
+
+    fun selectCategory(categoryId: Int?) {
+        selectedCategoryId.value = categoryId
+    }
 }

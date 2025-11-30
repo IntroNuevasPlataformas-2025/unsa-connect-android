@@ -9,6 +9,7 @@ import com.unsa.unsaconnect.data.models.CategoryWithNews
 import com.unsa.unsaconnect.data.models.New
 import com.unsa.unsaconnect.data.models.NewsCategoryCrossRef
 import com.unsa.unsaconnect.data.models.NewsWithCategories
+import com.unsa.unsaconnect.data.models.Category
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -22,7 +23,7 @@ interface NewsDao {
     fun getCategoryWithNews(categoryId: Int): Flow<CategoryWithNews>
 
     @Query("SELECT * FROM categories")
-    fun getAllCategories(): Flow<List<com.unsa.unsaconnect.data.models.Category>>
+    fun getAllCategories(): Flow<List<Category>>
 
     @Query("SELECT * FROM news WHERE isFavorite = 1")
     fun getFavoriteNews(): Flow<List<New>>
@@ -34,7 +35,7 @@ interface NewsDao {
     suspend fun insertNews(news: New)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCategory(category: com.unsa.unsaconnect.data.models.Category)
+    suspend fun insertCategory(category: Category)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNewsCategoryCrossRef(crossRef: NewsCategoryCrossRef)
